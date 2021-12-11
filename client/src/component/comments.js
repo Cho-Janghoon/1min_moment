@@ -6,13 +6,10 @@ import { Comment, Avatar, Button, Input } from 'antd';
 const {TextArea} = Input;
 
 function Comments({accessToken,clickMyVideoData,userInfo}) {
-  let renderComment = null;
   let x ;
   const [commentList, setCommentList] = useState([])
   const [commentValue, setCommentValue] = useState('')
   const [posting, setPosting] = useState('') // useEffect를위한 state입니다
-  const [videoId, setVideoId] = useState(null)
-  //timestamp
   
   const handleclick = (e) =>{
     setCommentValue(e.currentTarget.value)
@@ -40,14 +37,7 @@ function Comments({accessToken,clickMyVideoData,userInfo}) {
           
         }, ...commentList])
         x=res.data.data.comment_id
-        // setPosting({
-        //   comment:commentValue,
-        //   writer:userInfo.name,
-        //   id:parseInt(Math.random()*10000) //comments의  id
-        // })
-       // window.location.replace('/')
        setCommentValue('')
-       
        }
        else{
         alert("실패")
@@ -57,35 +47,6 @@ function Comments({accessToken,clickMyVideoData,userInfo}) {
       
   }
 
-  const uploadVideo = () => {
-    axios
-    .post(
-      `${process.env.REACT_APP_SERVER}/comment`,{
-        video_id:clickMyVideoData.video_id,
-        comment:commentValue
-      },{
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        "Content-Type" : "application/json"   
-      },
-      withCredentials: true
-    }
-      ).then((res)=>{
-       if(res.data.message==='Comment has been completed'){
-        alert("성공")
-       // window.location.replace('/')
-       }
-       else{
-        alert("실패")
-       }         
-      
-       }) 
-
-
-       
-       
-   
-  }
   const infiniteScroll = useCallback(() => {
     
     let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);

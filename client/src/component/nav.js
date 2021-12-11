@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 
 function Nav({handleSignOut,getSearch,searchInfo,setSearchInfo,onReset}){
     const history = useHistory();
-    const [searchBox, setSearchBox]=useState(false)
     const [tabStatus, setTabStatus]=useState({display:'none'})
     const [isTabOpen, setIstabOpen]=useState(false) 
     const isPc = useMediaQuery({
@@ -14,9 +13,6 @@ function Nav({handleSignOut,getSearch,searchInfo,setSearchInfo,onReset}){
     const isMobile = useMediaQuery({
         query : "(max-width:609px)"
     })
-   const openSeachBox = () =>{
-    setSearchBox(!searchBox)
-   }
 
     const searchHandleChange=(e)=>{
       setSearchInfo(e.target.value)

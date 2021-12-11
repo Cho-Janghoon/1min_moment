@@ -1,9 +1,5 @@
-import { useState } from 'react'
 
 export default function Addcategory2({confirmBtn,handleCategoty}){
-
-  const [categoryInfo, setcategoryInfo]= useState('')
-  const [checkList, setCheckList] = useState([])
 
    const handleCategoty2=(e)=>{
     handleCategoty(e)

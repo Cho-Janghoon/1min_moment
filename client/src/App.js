@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import axios from "axios"
 import './App.css';
@@ -19,8 +19,6 @@ axios.defaults.withCredentials = true;
 
 function App() {
   
-  const history = useHistory();
-  const [isLoading, setIsLoading] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
@@ -30,7 +28,6 @@ function App() {
 
   const getSearch= (search) =>{
     setSearchInfo(search)
-    console.log("App.js getSearch : ", search)
    }
   
    const onReset = () => {
@@ -179,13 +176,6 @@ function App() {
     })
   }
 
-  // 찜한 비디오 중 클릭한 영상 데이터 상태
-  const [clickMyLikeVideoData, setClickMyLikeVideoData] = useState(null)
-
-  // 찜한 비디오 중 클릭한 영상 데이터 상태 변경 함수
-  const clickMyLikeVideoDataFunc = (clickLikeVideoData) => {
-    setClickMyLikeVideoData(isLikeVideo.filter((el) => el.id === clickLikeVideoData)[0])
-  }
 
   return (
   <BrowserRouter>

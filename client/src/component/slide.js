@@ -2,7 +2,7 @@ import React from 'react';
 import './slide.css'
 import {Link} from 'react-router-dom';
 
-export default function Slide({image, title, channel, views, timestamp,video, getvideoInfo,video_id,category1,category2,category3}){
+export default function Slide({image, title, views, timestamp,video, getvideoInfo,video_id,category1,category2,category3}){
     const onClickVideo = ()=>{
 
         getvideoInfo(image,title, views, timestamp,video,video_id,category1,category2,category3)
@@ -24,10 +24,6 @@ export default function Slide({image, title, channel, views, timestamp,video, ge
         <div className='slide_info'>
         
         <div className="videocard_info2">
-            {/* <Avatar 
-               className="videocard_avatar" 
-               alt={channel}  
-            />*/}
             <div className="video_text2">
                 <h4>{title}</h4>
                 

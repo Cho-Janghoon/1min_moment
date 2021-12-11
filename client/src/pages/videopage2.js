@@ -6,7 +6,7 @@ import Comments from '../component/comments'
 
 axios.defaults.withCredentials = true;
 
-export default function VideoPage2({clickMyVideoData, userInfo, accessToken, viewStateFunc, isLogin, videoInfo}){
+export default function VideoPage2({clickMyVideoData, userInfo, accessToken, viewStateFunc, isLogin}){
   
     useEffect(() => {
         viewStateFunc(clickMyVideoData.id);

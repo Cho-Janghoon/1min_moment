@@ -1,24 +1,18 @@
-import Video from './video'
 import './main.css'
-import {useMediaQuery} from 'react-responsive'
 import { useCallback,useState, useEffect } from 'react'
 import Addcategory from './addcategory'
-import { Button } from '@material-ui/core'
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import UploadVideoCard from '../pages/UploadVideoCard';
 
 
 
-export default function Main({category,searchResult,searchInfo,getvideoInfo,setSearchInfo, setClickMyVideoDataFunc, setIsUploadVideo, accessToken}){
+export default function Main({searchInfo,setClickMyVideoDataFunc,accessToken}){
     const [currentCategory, setCurrentCategory]=useState('');
     const [showCategory, setshowCategory]=useState(false)
-    const [categoryInfo, setcategoryInfo]= useState('')
     const [checkList, setCheckList] = useState([])
     const [checkListDisplay, setCheckListDisplay] = useState([])
-    const [itemIndex, setItemIndex] = useState(0);
     const [itemList, setItemList] = useState(null)
-    const [cursor, setCursor] = useState(50)
 
     let used = false; 
      

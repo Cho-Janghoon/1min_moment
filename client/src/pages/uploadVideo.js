@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import React, {useState, useCallback} from 'react';
 import axios from "axios"
 import './uploadVideo.css'
@@ -8,8 +7,6 @@ import {useDropzone} from 'react-dropzone'
 
 
 function UploadVideo({accessToken}) {
-
-  const history = useHistory();
 
   const [selectedFile, setSelectedFile] = useState('');
   const [title, setTitle] = useState('')

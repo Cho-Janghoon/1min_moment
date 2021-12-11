@@ -1,41 +1,34 @@
-import React from 'react'
+import React, {useEffect} from 'react';
 import "./MyUploadVideo.css"
 import UploadVideoCard from './UploadVideoCard';
 
-const MyUploadVideo = () => {
+const MyUploadVideo = ({ isUploadVideo, setClickMyVideoDataFunc, handleUpload}) => { 
 
+  useEffect(() => {
+      handleUpload(); // 영상요청 함수 실행
+  },[])
     return (
 
-    <div className="myuploadvideo-box">
-        <div className="uploadvideocard-box">
-            <UploadVideoCard  
-            title="1분만에 얻는 생활 꿀팁!"
-            views="10.5만 views"
-            like="3만"
-            image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-            />
-            <UploadVideoCard 
-            title="1분만에 얻는 부동산 꿀팁!"
-            views="10.5만 views"
-            like="3만"
-            image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"/>
-            <UploadVideoCard 
-            title="나만 아는 부동산 꿀팁!"
-            views="10.5만 views"
-            like="3만"
-            image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"/>
-            <UploadVideoCard  
-            title="이것만 알면 부동산 왕!"
-            views="10.5만 views"
-            like="3만"
-            image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"/>
-            <UploadVideoCard  
-            title="1분만에 집 사는 법!"
-            views="10.5만 views"
-            like="3만"
-            image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"/>
+      <>
+      {isUploadVideo !== [] ?
+      <div className="myvideos col-12 sm-px-0">
+        <div className="col-md-9">
+          <div className="title"><img className="myvideo-title" src="https://i.ibb.co/tq5VJyk/image.png"/></div>
+          <div className="myuploadvideo-box container-fluid">
+            <div className="uploadvideocard-box row sm-p-5">
+              {
+                isUploadVideo && isUploadVideo.map((el) => {
+                  return <UploadVideoCard key={el.id} movieData={el} setClickMyVideoDataFunc={setClickMyVideoDataFunc}/> 
+                })
+              }
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+      :
+      <div>업로드 비디오 없음</div>
+      }
+    </>
     )
 }
 

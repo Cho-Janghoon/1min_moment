@@ -1,139 +1,169 @@
 require("dotenv").config();
+const { DATABASE_HOST, DATABASE_PORT, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME} = process.env;
 const db = require('../../../models');
+const { Op, fn, col } = require('sequelize');
 const sequelize = require('sequelize');
-const Op = sequelize.Op;
+const mysql = require('mysql');
+const { tokenCheck } = require('../../token')
+const connection = mysql.createConnection({
+  host     : DATABASE_HOST,
+  user     : DATABASE_USERNAME,
+  password : DATABASE_PASSWORD,
+  database : DATABASE_NAME,
+  port     : DATABASE_PORT
+});
+connection.connect();
 
 module.exports = async (req, res) => {
-  const { search, category1, category2, category3 } = req.query;
+  const { authorization, refreshToken } = req.headers;
+  let id;
+  if(authorization) {
+    const token = authorization.split(' ')[1];
+    const check = await tokenCheck(token, res, refreshToken);
+    if(check) {
+      const search = {};
+      if(check.email) {
+        search.email = check.email
+      }else {
+        search.social = check.social
+      }
+      const userData = await db.user.findOne({
+        where: search
+      })
+      id = userData.dataValues.id
+    }
+  }
+  const { search, cursor, sort, limit } = req.query;
+  const select = "select videos.id, title, users.name as writer, video, thumbnail, category1, category2, category3, videos.createdAt, videos.updatedAt, count(DISTINCT views.id) as views, count(DISTINCT video_likes.video_id) as likes"
+  let order = '';
+  let query = {};
+  let query2 = '';
+  let choice = '';
+  let having;
+  let having2 = '';
+  let num = limit || 30;
 
-  // 검색어도 없고 카테고리 1,2,3 이 없을경우에는 전체 비디오 정보를 보내주기
-  if(!search && !category1 && !category2 && !category3) {
-    const data = db.video.findAll({})
+  if(req.query.category) {
+    const category = req.query.category.split("/");
+    //쿼리 작성 if문
+    if(category.length === 3) {
+      query2 = `(category1 in ("${category[0]}", "${category[1]}", "${category[2]}")) AND (category2 in ("${category[0]}", "${category[1]}", "${category[2]}")) OR (category3 in ("${category[0]}", "${category[1]}", "${category[2]}"))`
+      query = 
+      {
+        [Op.and]: 
+        {
+          category1: { [Op.or]: category}, category2: {[Op.or]: category},category3: {[Op.or]: category}
+        }
+      }
+    }else if(category.length === 2) {
+      query2 = `(((category1 = "${category[0]}" OR category1 = "${category[1]}") AND (category2 = "${category[0]}" OR category2 = "${category[1]}")) OR ((category1 = "${category[0]}" OR category1 = "${category[1]}") AND (category3 = "${category[0]}" OR category3 = "${category[1]}")) OR ((category2 = "${category[0]}" OR category2 = "${category[1]}") AND (category3 = "${category[0]}" OR category3 = "${category[1]}")))`
+      query = 
+      {
+        [Op.or]: 
+        [
+          { [Op.and]: {category1: {[Op.or]: category}, category2: {[Op.or]: category}}},
+          { [Op.and]: {category1: {[Op.or]: category}, category3: {[Op.or]: category}}},
+          { [Op.and]: {category2: {[Op.or]: category}, category3: {[Op.or]: category}}}
+        ]
+      }
+    }else if(category.length === 1) {
+      query2 = `(category1 IN ('${category[0]}') OR category2 IN ('${category[0]}') OR category3 IN ('${category[0]}'))`
+      query = 
+      {
+        //[Op.or]: [{category1: category , category2: category, category3: category },{id : {[Op.between]: [cursor,cursor+10]}}],
+        //{[Op.gt]:cursor}}],
+        [Op.or]: {category1: category , category2: category, category3: category },
+      }
+    }
+  }
+ 
+  //검색어 찾기
+  if(search) {
+    query.title = {[Op.like]: "%" + search + "%"}
+    if(query2) {
+      query2 = `((${query2}) and title like "%${search}%")`
+    }else {
+      query2 = `title like "%${search}%"`
+    }
+  }
 
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-  // 검색어는 없고 category1만 온다면  
-  }else if(!search && category1 && !category2 && !category3) {
-    const data = db.video.findAll({
-      where: { category1: category1 }
-    })
-
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-  // 검색어는 없고 category1,categoty2 가 같이 오고 category3는 없다면  
-  }else if(!search && category1 && category2 && !category3) {
-    const data = db.video.findAll({
-      where: { category1: category1, category2: category2 }
-    })
-
-
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-    //검색어는 없고 category1,category2,category3 가 전부 온다면 
-  }else if(!search && category1 && category2 && category3) {
-    const data = db.video.findAll({
-      where: { category1: category1, category2: category2, category3: category3}
-    })
-
-
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
+  //정렬
+  if(sort === 'views') {
+    order = "order by views";
+    if(cursor) {
+      having = sequelize.literal(`COUNT(views.video_id) <= ${cursor}`);
+      having2 = `having count(views.video_id) < ${cursor}`
+    }
+  }else {
+    order = "order by id desc";
+    if(cursor) {
+      choice = {id: {[Op.lte]: [cursor]}};
+      if(query2) {
+        query2 = `((${query2}) and videos.id < ${cursor})`
+      }else {
+        query2 = `(videos.id < ${cursor})`
+      }
+    }
   }
   
+  if(query2) {
+    query2 = `where ` + query2
+  }
 
-   //이제 검색어가 들어오고 category1만 들어온다면
-   if(search && category1 && !category2 & !category3) {
-     const data = db.video.findAll({
-       where: {
-         category1: category1,
-         title: {
-           [Op.like]: "%" + search + "%"
-         }
-       }
-     })
+  
+  
+  // const userdata = await db.video.findAll(
+  //   {
+  //     attributes: ["id","title", "user_id", "video", "thumbnail", "category1", "category2", "category3", "createdAt", "updatedAt", [sequelize.fn('count', sequelize.col('views.video_id')), 'video_views']],
+  //     where: [query, choice], 
+  //     include: [{ 
+  //       model: db.views,
+  //       attributes: [],
+  //       required: false
+  //     }],
+  //     distinct: true,
+  //     // limit: 3,
+  //     order: sequelize.fn('count', sequelize.col('views.video_id')),
+  //     having: having ,
+  //     group: ["video.id"],
+  //   }
+  //   ); 
 
-    //  const data = categoryData.findAll({
-    //    where: { title: categoryData.title.indexOf(`${search}`) }
-    //  })
+    // console.log("query ============= ", `${select} from videos left join views on videos.id = views.video_id left join video_likes on videos.id = video_likes.video_id left join users on videos.user_id = users.id ${query2} group by videos.id ${having2} ${order} limit ${num}`)
+    connection.query(`${select} from videos left join views on videos.id = views.video_id left join video_likes on videos.id = video_likes.video_id left join users on videos.user_id = users.id ${query2} group by videos.id ${having2} ${order} limit ${num}`, async function (error, results, fields) {
+      if (error) {
+      } else{
+        const mychoice = await Promise.all(
+          results.map( async (el) => {
+            if(id) {
+              const isHave = await db.video_like.findOne({
+                where: {
+                  video_id: el.id,
+                  user_id: id
+                }
+              })
+      
+              if(isHave) {
+                return true;
+              }else {
+                return false;
+              }
+            }else {
+              return false;
+            }
+          })
+        )
+        const data = results.map((el, idx) => {
+          el.mychoice = mychoice[idx]
+          return el;
+        })
+  
+        res.json({
+          data: data,
+          message: "completed the inquiry",
+        })
 
-     //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-     return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-    //검색어가 들어오고 category1과 category2 들어오고 category3는 없을떄
-   }else if(search && category1 && category2 & !category3) {
-    const data = db.video.findAll({
-      where: {
-        category1: category1,
-        category2: category2,
-        title: {
-          [Op.like]: "%" + search + "%"
-        }
       }
-    })
 
-    // const data = categoryData.findAll({
-    //   where: { title: categoryData.title.indexOf(`${search}`) }
-    // })
-
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-
-    //검색어가 들어오고 category1과 category2와 category3가 다들어오면
-   }else if(search && category1 && category2 & !category3) {
-    const data = db.video.findAll({
-      where: {
-        category1: category1,
-        category2: category2,
-        category3: category3,
-        title: {
-          [Op.like]: "%" + search + "%"
-        }
-      }
-    })
-
-    // const data = categoryData.findAll({
-    //   where: { title: categoryData.title.indexOf(`${search}`) }
-    // })
-
-   //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음 
-    return res.status(200).json({
-      data: data,
-      message:"completed the inquiry"
-    })
-   }
-
-   //마지막 검색어만 들어온다면 검색어에 맞게 데이터를 보내주는 분기
-   if(search && !category1 && !category2 && !category3) {
-     const data = db.video.findAll({
-       where: {
-         title: {
-           [Op.like]: "%" + search + "%"
-         }
-       }
-     })
-
-    //무한 스크롤로 짤라서 데이터를 넘겨줘야하는지 아니면 그냥 보내도 되는지 아직 모르겠음
-     return res.status(200).json({
-       data: data,
-       message:"completed the inquiry"
-     })
-   }
-
-}
+    });
+  }

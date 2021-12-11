@@ -1,4 +1,4 @@
-.modal {
+.modalContainer {
     position: fixed;
     top: 0;
     right: 0;
@@ -9,24 +9,35 @@
   }
   
   .loginModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 480px;
-    height: 621px;
+    height: 600px;
     background-color: white;
     position: relative;
     box-sizing: border-box;
-    margin: 50px auto;
+    margin: 100px auto;
     padding: 20px;
     background: #fff;   
-    border-radius: 80px 0px 80px 0px / 80px 0px 80px 0px;
+    border-radius: 30px 30px 30px 30px / 30px 30px 30px 30px;
+    border: 7px solid #f1c40e;
   }
   
   
   
    .close {
+     position: absolute;
+     top: 20px;
+     right: 20px;
      float: right;
      font-size: 25px;
      color: black;
-     cursor: pointer
+     cursor: pointer;
+     z-index: 10;
+     /* padding-right: 10px;
+     padding-top: 10px; */
    }
   
    .modalContents {
@@ -34,7 +45,7 @@
      margin: 0 auto;
      width: 100%;
      position: relative;
-     padding: 0 20px 32px;
+     padding: 20px;
      display: flex;
      justify-content: center;
      flex-direction: column;
@@ -43,9 +54,9 @@
   
         .onemin_logo {
           margin: 0 auto;
-          width: 160px;
-          height: 160px;
-          margin-bottom: 10px;
+          width: 100px;
+          height: 100px;
+          margin-bottom: 30px;
           padding-bottom: 0;
         }
   
@@ -122,7 +133,7 @@
             }
 
             .kakao-login-box button span{
-              width: 300px;
+              /* width: 300px; */
               font-size: 15px;
               text-align: center;
               display: inline-block;
@@ -156,8 +167,12 @@
               position: absolute;
               left: 45px;
             }            
+             .google-login-box button div svg {
+               position: absolute;
+               top:0px;
+             }
              .google-login-box button span {
-              width: 300px;
+              /* width: 300px; */
               font-size: 15px;
               text-align: center;
               display: inline-block;
@@ -193,4 +208,12 @@
 
 
 
-  
+          @media only screen and (max-width: 480px) {
+            .loginModal {
+              width: 100vw;
+              height: 100vh;
+              margin: 0;
+              border-radius: 0;
+              border: 0;
+            }
+           } 

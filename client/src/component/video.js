@@ -1,32 +1,24 @@
+import { Link } from 'react-router-dom';
 import './video.css'
-import {useMediaQuery} from 'react-responsive'
-import Avatar from "@material-ui/core/Avatar";
-export default function Video({image, channelImage, title, channel, views, timestamp}) {
-    const isPc = useMediaQuery({
-        query : "(min-width:768px)"
-    })
-    const isMobile = useMediaQuery({
-        query : "(max-width:767px)"
-    })
 
+export default function Video({setClickMyVideoDataFunc,movieData}) {
+    
     return(
-        <div className="videocard">
-           <img className="videocard_thumbnail" src={image} alt=""/>
-           <div className="videocard_info">
-               <Avatar 
-                  className="videocard_avatar" 
-                  alt={channel} 
-                  src={channelImage} 
-               />
-               <div className="video_text">
-                   <h4>{title}</h4>
-                   <p>{channel}</p>
-                   <p>
-                       {views} · {timestamp}
-                   </p>
-               </div>
-           </div>
+       
+        <div className="videocard col-lg-4 col-md-6 col-sm-12 p-0 my-2">
+          <Link to={"/myvideopage"}>
+            <img className="upload-videocard_thumbnail col-11" src={movieData.thumbnail} alt="" onClick={() => setClickMyVideoDataFunc(movieData.id)} />
+          </Link>
+          <div className="upload-videocard_info">
+              <div className="upload-video_text col-11">
+                  <h4 className="col-12">{movieData.title}</h4>
+                  <p className="col-12 viewtxt">
+                      조회수 {movieData.views}  ·  <img className="upload-video-like-icon" src="https://i.ibb.co/hgRgsrY/image.png" alt="" /> {movieData.likes}
+                  </p>
+              </div>
+          </div>
         </div>
+        
     )
 
 }

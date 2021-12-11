@@ -1,178 +1,167 @@
-import Video from './video'
 import './main.css'
-import {useMediaQuery} from 'react-responsive'
-import { useState } from 'react'
+import { useCallback,useState, useEffect } from 'react'
 import Addcategory from './addcategory'
-export default function Main(){
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import UploadVideoCard from '../pages/UploadVideoCard';
+
+
+
+export default function Main({searchInfo,setClickMyVideoDataFunc,accessToken}){
     const [currentCategory, setCurrentCategory]=useState('');
     const [showCategory, setshowCategory]=useState(false)
-     const [categoryInfo, setcategoryInfo]= useState('')
-     const [checkList, setCheckList] = useState([])
+    const [checkList, setCheckList] = useState([])
+    const [checkListDisplay, setCheckListDisplay] = useState([])
+    const [itemList, setItemList] = useState(null)
+
+    let used = false; 
      
+     let x;
+     let y;
+
+    const history = useHistory()
     const openCategory = (e) =>{
    
     setshowCategory(!showCategory)
     setCheckList([])
-    console.log(showCategory)
-    console.log(currentCategory)
-     
+    setCheckListDisplay([])
+    
     }
     
     const confirmBtn = () =>{
         if(checkList.length>3){
-         alert('dkdkdk')
-         console.log(checkList)
+
          setshowCategory(!showCategory)
         }
         else{
         setshowCategory(!showCategory)
-        console.log(showCategory)
-         setCurrentCategory(checkList.join())
-         setCheckList([])
-         console.log(currentCategory)
+        setCheckListDisplay(checkListDisplay=>[...checkListDisplay,...checkList])
+        
+         setCurrentCategory(checkList.join('/'))
+
+         setCheckList('12121212',[])
         }
     }
     
   
     const handleCategoty = (e) =>{
-     //console.log(e.target.value)
           if(!checkList.includes(e.target.value)){
-              console.log(e.target.value)
               if(e.target.checked === true){
-              console.log('들어왔어요')
-              //setcategoryInfo(categoryInfo+`${e.target.value}`)
+
               setCheckList([...checkList,e.target.value])
-              //console.log(categoryInfo)
-              console.log('checklist',checkList)
               }
           }
-      
     }
-    
 
+    const infiniteScroll = useCallback(() => {
+      let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+      let scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+      let clientHeight = document.documentElement.clientHeight;
+
+      if(scrollTop + clientHeight+1 >scrollHeight && used) {
+        var config = {
+          method: 'get',
+          url: `${process.env.REACT_APP_SERVER}/videos`,
+          params: {
+            category: currentCategory,
+            cursor: x,
+            search:searchInfo,
+            limit: 10
+          },
+          headers: {authorization: `Bearer ${accessToken}`}
+        };
+        axios(config)
+        .then((res)=>{
+          setItemList(itemList => [...itemList, ...res.data.data])
+
+         if(res.data.data[res.data.data.length-1]){
+         x = res.data.data[res.data.data.length-1].id
+         }
+          
+        })
+       // 쿼리요청
+
+        }
+      }, []);
+    
+      useEffect(() => {
+      window.addEventListener('scroll', infiniteScroll, true);
+      return () => window.removeEventListener('scroll', infiniteScroll, true);
+      }, [infiniteScroll]);
+
+    //유즈콜백보다는 먼저 일어나는 이팩트
+     useEffect(()=>{
+      var config = {
+        method: 'get',
+        url: `${process.env.REACT_APP_SERVER}/videos`,
+        params: {
+          cursor: x,
+          category:currentCategory,
+          search:searchInfo,
+          limit: 10
+        },
+        headers: {authorization: `Bearer ${accessToken}`, }
+      };
+      axios(config)
+      .then((res)=>{
+        used = true;
+        setItemList([...res.data.data])
+
+      if(res.data.data[res.data.data.length-1]){
+       x = res.data.data[res.data.data.length-1].id
+       }
+      })
+     
+     // 쿼리요청
+     
+     },[searchInfo,currentCategory])
 
     return(
-     <div>
-     <div className='categorycontainer'> 
-      <div className='currentmenu'>{currentCategory}</div>
-      <div className='addbox' onClick= {openCategory}>+</div>   
-     </div> 
-     <div>
-       {showCategory === true ?
-      (<Addcategory confirmBtn={confirmBtn} handleCategoty={handleCategoty}/>)
-      :
-      null}
-      </div>
-      <div className='videocontainer'> {/*//곧 map으로 뿌릴 예정 ;; */}
-        <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-        <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-        <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-         <Video
-        title="1분만에 얻는 생활 꿀팁!"
-        views="10.5만 views"
-        timestamp="3 days ago"
-        channelImage="http://cdnimage.dailian.co.kr/news/201808/news_1535616895_736207_m_1.jpg"
-        channel="1min_moment"
-        image="https://miricanvas.zendesk.com/hc/article_attachments/360049546931/__________._5.png"
-        />
-        
-     </div>
-       </div>
-    )
 
-    
+     <div className="main-container col-12 sm-px-0">
+       <div className="main-box col-md-9">
+          <div className="title"><img className="main-title" src="https://i.ibb.co/7XrttV3/image.png"/></div>
+          <div className='category-container-box'>
+          <div className='categorycontainer'> 
+            <div className='addbox' onClick= {openCategory}>+</div>
+            <div>
+              {showCategory === true ?
+              (<Addcategory confirmBtn={confirmBtn} handleCategoty={handleCategoty}/>)
+              :
+              null}
+            </div> 
+            {checkListDisplay.length ===3 ? 
+            ( <div className='categorycontainer2'>
+                <div className='currentmenu_category'>{checkListDisplay[0]}</div>
+                <div className='currentmenu_category'>{checkListDisplay[1]}</div>
+                <div className='currentmenu_category'>{checkListDisplay[2]}</div>
+              </div>) : null }
+  
+            {checkListDisplay.length ===2 ? 
+            ( <div  className='categorycontainer2'>
+                <div className='currentmenu_category'>{checkListDisplay[0]}</div>
+                <div className='currentmenu_category'>{checkListDisplay[1]}</div>
+                
+              </div>) : null }
+            
+            {checkListDisplay.length ===1 ? 
+            ( <div  className='categorycontainer2'>
+                <div className='currentmenu_category'>{checkListDisplay[0]}</div>
+              </div>) : null }   
+          </div> 
+         
+          </div>
+          <div className='videocontainer container-fluid col-12'> {/*//곧 map으로 뿌릴 예정 ;; */}
+            <div className="videocontainer-box col-12 row sm-p-5">
+              {itemList !== null ?
+              itemList.map((obj, index, arr) => <UploadVideoCard key={obj.id} movieData={obj} setClickMyVideoDataFunc={setClickMyVideoDataFunc}/>)
+              : null }
+            </div>   
+          </div>
+       </div>
+     </div>
+    )
 }
+            
+
 

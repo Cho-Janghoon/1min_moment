@@ -1,0 +1,32 @@
+.mylikevideo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    position: relative;
+    top: 80px;
+}
+
+.mylikevideo-title {
+    width: 25vw;
+}
+
+.mylikevideo-box {
+    margin-top: 90px;
+}
+
+.likevideocard-box {
+    display: flex;
+    flex-wrap: wrap;
+    /* padding-left: 23px; */
+}
+
+
+
+@media only screen and (max-width: 768px) {
+    .mylikevideo-title {
+        width: 40vw;
+    }
+}

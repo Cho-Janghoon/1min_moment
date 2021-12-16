@@ -1,0 +1,38 @@
+/* .myuploadvideo-box {
+    box-sizing: border-box;
+    padding-bottom: 0;
+    position:relative;
+    top: 80px;
+} */
+
+.myvideos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  position: relative;
+  top: 80px;
+  
+}
+
+.myvideo-title {
+  width: 25vw;
+}
+
+.myuploadvideo-box {
+  margin-top: 90px;
+}
+
+.uploadvideocard-box {
+    display: flex;
+    flex-wrap: wrap;
+    /* padding-left: 23px; */
+}
+
+@media only screen and (max-width: 768px) {
+  .myvideo-title {
+    width: 40vw;
+  }
+} 

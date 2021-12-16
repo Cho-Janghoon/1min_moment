@@ -1,0 +1,219 @@
+.modalContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);  
+    z-index: 1050;
+  }
+  
+  .loginModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 480px;
+    height: 600px;
+    background-color: white;
+    position: relative;
+    box-sizing: border-box;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;   
+    border-radius: 30px 30px 30px 30px / 30px 30px 30px 30px;
+    border: 7px solid #f1c40e;
+  }
+  
+  
+  
+   .close {
+     position: absolute;
+     top: 20px;
+     right: 20px;
+     float: right;
+     font-size: 25px;
+     color: black;
+     cursor: pointer;
+     z-index: 10;
+     /* padding-right: 10px;
+     padding-top: 10px; */
+   }
+  
+   .modalContents {
+     box-sizing: border-box;
+     margin: 0 auto;
+     width: 100%;
+     position: relative;
+     padding: 20px;
+     display: flex;
+     justify-content: center;
+     flex-direction: column;
+   }
+  
+  
+        .onemin_logo {
+          margin: 0 auto;
+          width: 100px;
+          height: 100px;
+          margin-bottom: 30px;
+          padding-bottom: 0;
+        }
+  
+  
+        .loginEmail {
+          margin-top: 10px;
+          border-radius: 2px;
+          width: 100%;
+          height: 40px;
+          border: 1px solid #e5e5e5;
+          padding: 9px 12px;
+          outline: none;
+          box-sizing: border-box;
+        }
+        input::placeholder {
+          color: #999999;
+        }
+        .loginPassword {
+          margin-top: 15px;
+          border-radius: 2px;
+          width: 100%;
+          height: 40px;
+          border: 1px solid #e5e5e5;
+          padding: 9px 12px;
+          box-sizing: border-box;
+        }
+  
+        .loginBtn {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+          height: 40px;
+          font-size: 14px;
+          padding: 13px 30px;
+          cursor: pointer;
+          background-color: rgb(20, 20, 20);
+          color: white;
+          line-height: 1px;
+          margin-top: 20px;
+          margin-bottom: 12px;
+          border-radius: 3px;
+          border-style: none;
+        }
+
+        .errorMessege {
+          color: red;
+          background-color: #f8d7da;
+          border-color: #f5c6cb;
+          position: relative;
+          padding: 6px 0px;
+          border: 1px solid transparent;
+          border-radius: 0.25rem;
+          margin: 0;
+        }
+  
+         .socialBox {
+          margin-bottom: 30px;
+        }
+          .kakao-login-box  {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 55px;
+          }
+
+          .kakao-login-box button {
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+          }
+
+            .kakao-login-box button .kakaoLogo {
+              width: 37px;
+              height: 37px;
+              padding: 0px 0px 0px 3px;
+              position: absolute;
+              left: 45px;
+            }
+
+            .kakao-login-box button span{
+              /* width: 300px; */
+              font-size: 15px;
+              text-align: center;
+              display: inline-block;
+              box-sizing: border-box;
+              color: rgb(19, 19, 19);
+            }
+
+          
+          .google-login-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }          
+            .google-login-box button {
+              width: 400px;
+              padding-left: 20px;
+              margin-top: 5px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-sizing: border-box;
+              margin-bottom: 10px;
+              border-radius: 3px;
+              cursor: pointer
+            }            
+             .google-login-box button div {
+              width: 20px;
+              height: 20px;
+              padding: 0px 0px 0px 0px;
+              position: absolute;
+              left: 45px;
+            }            
+             .google-login-box button div svg {
+               position: absolute;
+               top:0px;
+             }
+             .google-login-box button span {
+              /* width: 300px; */
+              font-size: 15px;
+              text-align: center;
+              display: inline-block;
+              box-sizing: border-box;
+              color: rgb(19, 19, 19);
+            }
+  
+        .loginEnd {
+          text-align: center;
+          font-size: 11px;
+        }
+  
+          .loginLine {
+            color: #000000;
+            font-size: 13px;
+            margin-bottom: 35px;
+            cursor: pointer;
+          }
+
+          .loginLine:hover {
+            color: #F05C69;
+          }
+  
+            a {
+              color: black;
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          
+          .noUser {
+            text-decoration: underline;
+          }
+
+
+
+          @media only screen and (max-width: 480px) {
+            .loginModal {
+              width: 100vw;
+              height: 100vh;
+              margin: 0;
+              border-radius: 0;
+              border: 0;
+            }
+           } 

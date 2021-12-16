@@ -1,0 +1,74 @@
+.signup-complete-modal-box {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+  }
+  
+  .signup-complete-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 480px;
+    height: 600px;
+    background-color: white;
+    position: relative;
+    box-sizing: border-box;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;   
+    border-radius: 30px 30px 30px 30px / 30px 30px 30px 30px;
+    border: 7px solid #f1c40e;
+  }
+  
+   .signup-complete-modal-contents {
+     box-sizing: border-box;
+     margin: 0 auto;
+     width: 100%;
+     position: relative;
+     padding: 0 20px 32px;
+     display: flex;
+     justify-content: center;
+     flex-direction: column;
+   }
+  
+  
+           .onemin_logo3 {
+            position: absolute;
+            top: -143px;
+            left: 163px;
+            margin: 0 auto;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }        
+
+        .signup-complete-txt {
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .signup-complete-button {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+          height: 40px;
+          font-size: 14px;
+          font-weight: bold;
+          padding: 13px 30px;
+          cursor: pointer;
+          background-color: #F05C69;
+          color: white;
+          line-height: 1px;
+          margin-top: 20px;
+          margin-bottom: 12px;
+          border-radius: 3px;
+          border-style: none;
+        }
+
+        .signup-complete-button:hover {
+            color: #2983C5;
+          }

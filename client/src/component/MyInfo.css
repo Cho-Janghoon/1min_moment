@@ -1,0 +1,192 @@
+.myInfo-modalbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);  
+    z-index: 1050;
+  }
+  
+  .myInfo-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 650px;
+    height: 400px;
+    background-color: white;
+    box-sizing: border-box;
+    position: relative;
+    margin: 150px auto;
+    padding: 20px;
+    background: #fff;   
+    border-radius: 30px 30px 30px 30px / 30px 30px 30px 30px;
+    border: 7px solid rgb(41,131,197, 0.5);
+  }
+
+  .myInfo-modal-content {
+    width: 380px;
+    height: 380px;
+    margin: 30px 30px;
+    font-family: 'SBAggroM';
+    /* font-size: 35px; */
+  }
+
+  .myInfo-modal-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .myInfo-title {
+    width: 180px;
+  }
+
+  .myInfo-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .myInfo-modal-username {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    float: left;
+    /* margin: 10px; */
+  }
+
+  .myInfo-user-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 18px;
+  }
+
+  .myInfo-modal-useremail {
+    font-size: 20px;
+    margin-bottom: 15px;
+    /* margin: 10px; */
+  }
+
+  .myInfo-email-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 18px;
+  }
+
+  .myInfo-modal-modifiedbox {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .myInfo-modal-buttonbox {
+    margin: 0 20px;
+  }
+
+  .myInfo-modal-inputbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+
+
+  .errorMessege2 {
+    color: red;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    position: relative;
+    padding: 6px 0px;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    margin: 0;
+    margin-bottom: 5px;
+    width: 100%;
+  }
+
+  .confirm {
+    margin: 5px 0;
+  }
+
+
+
+  @font-face {
+    font-family: 'SBAggroB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+  @font-face {
+  font-family: 'SBAggroM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+  @media only screen and (max-width: 767px) {
+    .myInfo-modalbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);  
+      z-index: 1050;
+    }
+
+    .myInfo-modal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      box-sizing: border-box;
+      position: relative;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;   
+      border-radius: 0;
+      border: 0;
+    }
+
+    .myInfo-modal-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 380px;
+      height: 380px;
+      margin: 30px 30px;
+      font-family: 'SBAggroM';
+      /* font-size: 35px; */
+    }
+
+    .myInfo-body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .myInfo-modal-modifiedbox {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+ } 
